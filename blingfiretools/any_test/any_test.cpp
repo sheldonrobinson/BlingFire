@@ -19,7 +19,7 @@
 
 #ifdef WIN32
 #define FALoadLibrary(fileName) ::LoadLibraryA(fileName)
-#define FAGetProcAddress(handle, fnName) ::GetProcAddressA((HMODULE)handle, fnName)
+#define FAGetProcAddress(handle, fnName) ::GetProcAddress((HMODULE)handle, fnName)
 #define FAFreeLibrary(handle) ::FreeLibrary((HMODULE)handle)
 const char * g_BlingFireModuleName = "./blingfiretokdll.dll";
 #else
