@@ -4,7 +4,7 @@ project (BLING_FIRE)
 
 set (BLING_FIRE_VERSION "0.1.8")
 
-option(BLING_FIRE_INSTALL "Install applications and libraries" OFF))
+option(BLING_FIRE_INSTALL "Install applications and libraries" OFF)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/blingfireclient.library/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/blingfireclient.library/src)
