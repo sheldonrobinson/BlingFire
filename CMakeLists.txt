@@ -4,6 +4,8 @@ project (BLING_FIRE)
 
 set (BLING_FIRE_VERSION "0.1.8")
 
+option(BLING_FIRE_INSTALL "Install applications and libraries" OFF))
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/blingfireclient.library/inc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/blingfireclient.library/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/blingfirecompile.library/inc)
@@ -96,9 +98,11 @@ FOREACH(dir ${SUBDIRS})
 
       add_library(${dirname} SHARED ${sourcefile} ${headerfile} ${resourcefile} ${deffile})
       add_library(${dirname}_static ${sourcefile} ${resourcefile} ${deffile})
-      INSTALL(
-        FILES ${headerfile}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	  if(BLING_FIRE_INSTALL)
+		  INSTALL(
+			FILES ${headerfile}
+			DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	  endif()
 
       target_link_libraries(${dirname} PRIVATE fsaClient)
       target_link_libraries(${dirname}_static fsaClient)
@@ -120,15 +124,16 @@ FOREACH(dir ${SUBDIRS})
     ENDIF()
 ENDFOREACH()
 
-INSTALL(
-  TARGETS blingfiretokdll
-  EXPORT blingfire-targets
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
+if(BLING_FIRE_INSTALL)
+	INSTALL(
+	  TARGETS blingfiretokdll
+	  EXPORT blingfire-targets
+	  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	)
+endif()
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
   "${PROJECT_BINARY_DIR}/cmake/blingfire-config-version.cmake"
@@ -140,11 +145,13 @@ configure_file(${PROJECT_SOURCE_DIR}/cmake/blingfire-config.cmake.in
   ${PROJECT_BINARY_DIR}/cmake/blingfire-config.cmake
   COPYONLY
 )
-install(FILES ${PROJECT_BINARY_DIR}/cmake/blingfire-config.cmake
-  ${PROJECT_BINARY_DIR}/cmake/blingfire-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/blingfire
-)
+if(BLING_FIRE_INSTALL)
+	install(FILES ${PROJECT_BINARY_DIR}/cmake/blingfire-config.cmake
+	  ${PROJECT_BINARY_DIR}/cmake/blingfire-config-version.cmake
+	  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/blingfire
+	)
 
-install(EXPORT blingfire-targets
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/blingfire
-)
+	install(EXPORT blingfire-targets
+	  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/blingfire
+	)
+endif()
